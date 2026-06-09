@@ -2,6 +2,7 @@ package com.poojahshah.example.chaper.one;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 // Write your answer here, and then test your code.
 // Your job is to implement the findAnswer() method.
@@ -16,10 +17,15 @@ class Answer {
     // Return the highest grade for the students with a specific major
     static int findAnswer(List<Student> students, String major) {
         // Your code goes here.
-        int result = students.stream()
+//        int result = students.stream()
+//                .filter(student -> student.getMajor().equals(major))
+//                .max(Comparator.comparing(Student::getMaxGrade)).get().getMaxGrade();
+//        return result;
+
+        return students.stream()
                 .filter(student -> student.getMajor().equals(major))
-                .max(Comparator.comparing(Student::getMaxGrade)).get().getMaxGrade();
-        return result;
+                .flatMap(s -> s.getGrades().values().stream())
+                .max(Integer::compareTo).orElseGet(() -> 0);
 
     }
 
@@ -31,6 +37,7 @@ class Answer {
                 new Student("Jessica", "Rodriguez", "Mathematics", Map.of("Algorithms", 85, "Data Structures", 80, "Calculus", 89)));
         String major = "Computer Science";
         int result = Answer.findAnswer(students, major);
+        System.out.println(result);
     }
 
 }
@@ -64,19 +71,19 @@ class Student {
         return grades;
     }
 
-    public int getMaxGrade(){
-        return maxUsingStreamAndLambda(grades);
-    }
-
-    public <K, V extends Comparable<V>> V maxUsingStreamAndLambda(Map<K, V> map) {
-        Optional<Map.Entry<K, V>> maxEntry = map.entrySet()
-                .stream()
-                .max((Map.Entry<K, V> e1, Map.Entry<K, V> e2) -> e1.getValue()
-                        .compareTo(e2.getValue())
-                );
-
-        return maxEntry.get().getValue();
-    }
+//    public int getMaxGrade(){
+//        return maxUsingStreamAndLambda(grades);
+//    }
+//
+//    public <K, V extends Comparable<V>> V maxUsingStreamAndLambda(Map<K, V> map) {
+//        Optional<Map.Entry<K, V>> maxEntry = map.entrySet()
+//                .stream()
+//                .max((Map.Entry<K, V> e1, Map.Entry<K, V> e2) -> e1.getValue()
+//                        .compareTo(e2.getValue())
+//                );
+//
+//        return maxEntry.get().getValue();
+//    }
 }
 
 
