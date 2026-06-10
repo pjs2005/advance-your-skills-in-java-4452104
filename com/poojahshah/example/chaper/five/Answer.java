@@ -19,10 +19,11 @@ class DatabaseConnection {
 
     private String databaseURL;
 
-    private DatabaseConnection() {
+    private DatabaseConnection(String databaseURL) {
         if (instance != null) {
             throw new IllegalStateException("Instance is already created");
         }
+        this.databaseURL = databaseURL;
     }
 
     public static void setDatabaseURL(String databaseURL) {
@@ -33,11 +34,10 @@ class DatabaseConnection {
         if (instance == null) {
             synchronized (DatabaseConnection.class) {
                 if (instance == null) {
-                    instance = new DatabaseConnection();
+                    instance = new DatabaseConnection("jdbc:mysql://localhost:3306/mydatabase");
                 }
             }
         }
-        setDatabaseURL("jdbc:mysql://localhost:3306/mydatabase");
         return instance;
     }
 
