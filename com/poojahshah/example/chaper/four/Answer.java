@@ -18,7 +18,7 @@ class Answer {
 
     public static void main(String[] args) {
         // This is how your code will be called.
-// You can edit this code to try different testing cases.
+        // You can edit this code to try different testing cases.
         List<Integer> numbers = Arrays.asList(5, 10, 15, 20, 25, 30);
         Map<Integer, BigInteger> result = Answer.findAnswer(numbers);
     }
