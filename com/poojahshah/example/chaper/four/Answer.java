@@ -1,7 +1,5 @@
 package com.poojahshah.example.chaper.four;
 
-// Java code below
-
 import java.math.BigInteger;
 import java.util.*;
 import java.util.concurrent.*;
@@ -10,11 +8,6 @@ import java.util.concurrent.*;
 // Your job is to implement the findAnswer() method and the FactorialTask class.
 
 class Answer {
-
-    // Change these boolean values to control whether you see
-    // the expected result and/or hints.
-    static boolean showExpectedResult = false;
-    static boolean showHints = false;
 
     public static void main(String[] args) {
         // This is how your code will be called.
@@ -29,6 +22,7 @@ class Answer {
         // Your code goes here.
         Map<Integer, BigInteger> result = new HashMap<>(numbers.size());
         ExecutorService executor = Executors.newFixedThreadPool(10);
+        
         for (Integer value : numbers) {
             FactorialTask factorialTask = new FactorialTask(value);
             Future<Map.Entry<Integer, BigInteger>> future = executor.submit(factorialTask);
@@ -37,9 +31,7 @@ class Answer {
                 Map.Entry<Integer, BigInteger> calc = future.get();
                 result.put(calc.getKey(), calc.getValue());
 
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -50,8 +42,7 @@ class Answer {
 
 class FactorialTask implements Callable<Map.Entry<Integer, BigInteger>> {
 
-    // Some of your code goes here
-    private Integer number;
+    private final Integer number;
 
     FactorialTask(Integer number) {
         this.number = number;
@@ -63,12 +54,9 @@ class FactorialTask implements Callable<Map.Entry<Integer, BigInteger>> {
         BigInteger res = BigInteger.valueOf(1);
         for (int i = 1; i <= number; i++) {
             res = res.multiply(BigInteger.valueOf(i));
-
         }
 
-        Map.Entry<Integer, BigInteger> entry = Map.entry(number, res);
-
-        return entry;
+        return Map.entry(number, res);
     }
 }
 
