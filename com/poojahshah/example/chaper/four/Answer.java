@@ -22,7 +22,7 @@ class Answer {
         // Your code goes here.
         Map<Integer, BigInteger> result = new HashMap<>(numbers.size());
         ExecutorService executor = Executors.newFixedThreadPool(10);
-        
+
         for (Integer value : numbers) {
             FactorialTask factorialTask = new FactorialTask(value);
             Future<Map.Entry<Integer, BigInteger>> future = executor.submit(factorialTask);
