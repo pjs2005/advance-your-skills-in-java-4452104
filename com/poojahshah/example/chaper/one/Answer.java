@@ -29,6 +29,18 @@ class Answer {
 
     }
 
+    static Map<Student, Integer> topGrades(List<Student> students) {
+        Map<Student, Integer> studentTopGrade = new HashMap<>(students.size());
+
+        students.forEach(student -> {
+            Map<String, Integer> grades = student.getGrades();
+            int maxGrade = grades.values().stream().max(Integer::compareTo).orElseGet(() -> 0);
+            studentTopGrade.put(student, maxGrade);
+        });
+        return studentTopGrade;
+    }
+
+
     public static void main(String[] args) {
         List<Student> students = Arrays.asList(
                 new Student("Amine", "Ousmane", "Computer Science", Map.of("Algorithms", 90, "Data Structures", 80, "Calculus", 85)),
@@ -38,6 +50,14 @@ class Answer {
         String major = "Computer Science";
         int result = Answer.findAnswer(students, major);
         System.out.println(result);
+
+        Map<Student, Integer> grades = topGrades(students);
+        grades.forEach((s, integer) ->
+                System.out.println(
+                        "Name: " + s.getFirstname() + " " +
+                                s.getLastname() + " \nMajour: " +
+                                s.getMajor() + ": " + "\n Top Grade: " +
+                                integer));
     }
 
 }
