@@ -21,6 +21,7 @@ class Answer {
     static double getAverage(List<Integer> source) {
         // Your code goes here.
         int total = source.stream().mapToInt(Integer::intValue).sum();
+        int totalNew = source.stream().reduce(0,Integer::sum);
         return source.stream().mapToInt(Integer::intValue).sum() / source.size();
     }
 }
