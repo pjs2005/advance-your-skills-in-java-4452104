@@ -24,17 +24,16 @@ class Answer {
     // Return the indices of the numbers in the source list that add up to target
     static List<Integer> getIndices(List<Integer> source, int target) {
         // Your code goes here.
-        List<Integer> result = new ArrayList<>();
-        for(int i = 0; i < source.size(); i++){
-            for(int j = i+1; j < source.size(); j++){
-                if(source.get(i) + source.get(j) == target){
-                    result.add(i);
-                    result.add(j);
-                    return result;
-                }
+        for(int i = 0; i < source.size(); i++) {
+            int neededvalue = target - source.get(i);
+            if (source.contains(neededvalue)) {
+                int index = source.indexOf(neededvalue);
+
+                return Arrays.asList(i,index);
             }
         }
-        return result;
+
+        return new ArrayList<>();
     }
 
 }
