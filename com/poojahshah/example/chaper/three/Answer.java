@@ -27,3 +27,10 @@ class Answer {
     String value();
 
 }
+
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+@interface Emailvalidation {
+    String message() default "Invalid email format";
+
+}
