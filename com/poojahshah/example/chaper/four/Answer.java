@@ -28,24 +28,22 @@ class Answer {
     static Map<Integer, BigInteger> findAnswer(List<Integer> numbers) {
         // Your code goes here.
         Map<Integer, BigInteger> result = new HashMap<>(numbers.size());
-        ExecutorService executor = Executors.newFixedThreadPool(numbers.size()/3);
-        for(Integer value: numbers){
+        ExecutorService executor = Executors.newFixedThreadPool(10);
+        for (Integer value : numbers) {
             FactorialTask factorialTask = new FactorialTask(value);
-//            Thread thread = new Thread(factorialTask);
             Future<Map.Entry<Integer, BigInteger>> future = executor.submit(factorialTask);
 
             try {
                 Map.Entry<Integer, BigInteger> calc = future.get();
-                result.put(calc.getKey(),calc.getValue());
+                result.put(calc.getKey(), calc.getValue());
 
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             } catch (ExecutionException e) {
                 throw new RuntimeException(e);
             }
-
-
         }
+        executor.shutdown();
         return result;
     }
 }
@@ -55,7 +53,7 @@ class FactorialTask implements Callable<Map.Entry<Integer, BigInteger>> {
     // Some of your code goes here
     private Integer number;
 
-    FactorialTask(Integer number){
+    FactorialTask(Integer number) {
         this.number = number;
     }
 
@@ -63,13 +61,12 @@ class FactorialTask implements Callable<Map.Entry<Integer, BigInteger>> {
     public Map.Entry<Integer, BigInteger> call() throws Exception {
         // Your code goes here.
         BigInteger res = BigInteger.valueOf(1);
-        for(int i = 1;i <= number; i++){
-//            res *= i;
+        for (int i = 1; i <= number; i++) {
             res = res.multiply(BigInteger.valueOf(i));
 
         }
 
-        Map.Entry<Integer, BigInteger> entry = Map.entry(number,res);
+        Map.Entry<Integer, BigInteger> entry = Map.entry(number, res);
 
         return entry;
     }
