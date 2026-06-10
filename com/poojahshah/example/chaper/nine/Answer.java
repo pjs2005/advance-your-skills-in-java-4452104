@@ -1,5 +1,6 @@
 package com.poojahshah.example.chaper.nine;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -16,12 +17,15 @@ public class Answer {
     public static void main(String[] args) {
         String source = "there are both smaller and bigger words here";
         List<String> result = Answer.findFiveOrFewer(source);
+        result.forEach(System.out::println);;
     }
 
     // Return the a list of words with 5 or fewer characters
     static List<String> findFiveOrFewer(String source) {
         // Your code goes here.
-        return new ArrayList<>();
+        List<String> words = Arrays.stream(source.split(" ")).toList();
+
+        return words.stream().filter(s -> s.length() <= 5).toList();
     }
 
 }
