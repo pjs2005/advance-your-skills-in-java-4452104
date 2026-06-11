@@ -25,20 +25,22 @@ class Answer {
     static String getAllExceptions() {
         ExecutorService executorService = Executors.newFixedThreadPool(1);
         List<String> exceptions = new ArrayList<>();
+        List<Future> futures = new ArrayList<>();
         try {
             for (int i = 0; i < 10; i++) {
+                    futures.add(executorService.submit(Answer::getTask));
+            }
+
+            for (int i = 0; i < futures.size(); i++) {
                 try {
-                    Future<?> result = executorService.submit(Answer::getTask);
-                    result.get();
-                    System.out.println("test");
-                } catch (RuntimeException e) {
+                    Future current = futures.get(i);
+                    current.get();
+                } catch (InterruptedException | RuntimeException | ExecutionException e) {
                     exceptions.add(e.getMessage());
-                } catch (ExecutionException e) {
-                    exceptions.add(e.getMessage());
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
                 }
             }
+
+
         } finally {
             executorService.shutdown();
         }
