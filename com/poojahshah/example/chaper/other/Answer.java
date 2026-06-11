@@ -1,13 +1,7 @@
 package com.poojahshah.example.chaper.other;
 
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.stream.Collectors;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 class Answer {
 
@@ -17,42 +11,54 @@ class Answer {
     static boolean showHints = false;
 
     public static void main(String[] args) {
-        String result = Answer.getAllExceptions();
+        String result = Answer.getRootException();
         System.out.println(result);
     }
 
-    // Return all the messages for all exceptions thrown
-    static String getAllExceptions() {
-        ExecutorService executorService = Executors.newFixedThreadPool(1);
-        List<String> exceptions = new ArrayList<>();
-        List<Future> futures = new ArrayList<>();
+    // Return the originating Exception message
+    static String getRootException()  {
         try {
-            for (int i = 0; i < 10; i++) {
-                    futures.add(executorService.submit(Answer::getTask));
+            methodA();
+        } catch (Exception e) {
+            Throwable cause = null;
+            Throwable result = e;
+            while(null != (cause = result.getCause())  && (result != cause) ) {
+                result = cause;
             }
-
-            for (int i = 0; i < futures.size(); i++) {
-                try {
-                    Future current = futures.get(i);
-                    current.get();
-                } catch (InterruptedException | RuntimeException | ExecutionException e) {
-                    exceptions.add(e.getMessage());
-                }
-            }
-
-
-        } finally {
-            executorService.shutdown();
+            return result.toString();
         }
-        return exceptions.toString();
+        return "";
     }
 
-    public static void getTask() throws RuntimeException {
-        String threadName = Thread.currentThread().getName();
-        throw new RuntimeException(
-                "Exception in thread: " + threadName);
+    static void methodA() {
+        try {
+            methodB();
+        } catch (Exception e) {
+            throw new RuntimeException("Exception in methodA", e);
+        }
+
     }
 
+    static void methodB() {
+        try {
+            methodC();
+        } catch (Exception e) {
+            throw new RuntimeException("Exception in methodB", e);
+        }
+    }
+
+    static void methodC() {
+        throw new RuntimeException("Exception in methodC");
+    }
+
+    static String getStackTraceAsString(Exception e) {
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stringWriter);
+        e.printStackTrace(printWriter);
+        printWriter.flush();
+        return stringWriter.toString();
+    }
 }
+
 
 
