@@ -10,10 +10,35 @@ class Answer {
     static boolean showExpectedResult = false;
     static boolean showHints = false;
 
-    // Modfify the list to remove the String in toRemove
-    static String modifyList(List<String> items, String toRemove) {
+    public static void main(String[] args) {
+        String result = Answer.getRootExceptionMessage();
+        System.out.println(result);
+    }
 
-        return items.stream().filter(item -> !item.equals(toRemove)).collect(Collectors.toList()).toString();
+    // Return the largest number in the 'numbers' array
+    static String getRootExceptionMessage() {
+        try {
+            methodA();
+        } catch (Exception e) {
+            return "Exception: " + e.getMessage();
+        }
+        return "no exceptions!";
+    }
+
+    private static void methodA() {
+        try {
+            methodB();
+        } catch (Exception ignored) {
+            throw ignored;
+        }
+    }
+
+    private static void methodB() {
+        methodC();
+    }
+
+    private static void methodC() {
+        throw new RuntimeException("Exception in methodC");
     }
 
 }
