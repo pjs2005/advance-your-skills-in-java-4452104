@@ -33,10 +33,10 @@ class Answer {
         // to add each item's value to the cart.
 
         AtomicReference<Float> total = new AtomicReference<>(0.0f);
+
         items.forEach(item -> {
-            float current = total.get();
             float newitem = item.getPrice() * item.getQuantity();
-            total.getAndSet(current + newitem);
+            total.updateAndGet(current -> newitem + current);
         });
         return total.get();
     }
