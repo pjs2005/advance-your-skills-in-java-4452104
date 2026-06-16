@@ -27,7 +27,7 @@ class Answer {
                 .mapToObj(s -> String.valueOf(s))
                 .toList().stream()
                 .collect(Collectors.joining(","));
-        
+
     }
 
 }
